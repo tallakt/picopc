@@ -8,6 +8,7 @@ describe PicOpc do
     po.read('Random.Int1').should_not be_nil
     po['Random.Int1'].should_not be_nil
   end
+
   it 'Should be able to write a tag from Matrikon.OPC.Simulator' do
     tag = 'Bucket Brigade.String'
     po = PicOpc::Client.new MATRIKON
@@ -54,6 +55,18 @@ describe PicOpc do
       m.int.should == 5
       m.int = 6
       m.int.should == 6
+    end
+  end
+
+  it 'Sould add a prefix to tag names if :prefix option is set' do
+    PicOpc.connect MATRIKON, :prefix => 'Bucket Brigade.' do |m|
+      (97..98).each do |x|
+        m['Int1'] = x
+        m['Int1'].should == x
+      end
+      m.tag :int, 'Int1'
+      m.int = 99
+      m.int.should == 99
     end
   end
 end

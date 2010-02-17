@@ -45,6 +45,7 @@ module PicOpc
         else
           @source = OPCDataSource::OPCDevice
         end
+        @prefix = options[:prefix].to_s || ''
       rescue Exception => e
         PicOpcException[e] # wrap all exceptions in this type
       end
@@ -61,7 +62,7 @@ module PicOpc
 
     def add_item(name)
       if not @items.key? name
-        @items[name] = @opc_items.AddItem(name, @handle)
+        @items[name] = @opc_items.AddItem(@prefix + name, @handle)
         @handle += 1
       end
       @items[name]

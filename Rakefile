@@ -17,7 +17,7 @@ begin
     # generates an error, no big deal
     # gem.platform = Gem::Platform::WIN32
     gem.rdoc_options << '--title' << 'PicOpc -- Tiny Ruby OPC' <<
-                           '--main' << 'README' <<
+                           '--main' << 'README.rdoc' <<
                                                   '--line-numbers'
 
 

@@ -16,7 +16,11 @@ To run the tests, you must install the rspec gem and the free Matrikon OPC Simul
 
 == Examples
 
-this simple example covers most functionality
+=== Simple example
+
+This simple example covers most functionality:
+
+	require 'picopc'
 
 	PicOpc.connect 'Matrikon.OPC.Simulation' do |opc|
 		# Read a variable
@@ -38,11 +42,16 @@ this simple example covers most functionality
 Note that all exceptions thrown are of the class +PicOpcException+.
 
 
+=== Without a block
+
 If you don't want to use a block you can do this:
 
 	opc = PicOpc::Client.new 'Matrikon.OPC.Simulation'
 	puts opc.read('Random.Int1')
 	opc.cleanup
+
+
+=== Cache option
 
 Sometimes you may want to tweak the :cache option
 	
@@ -51,8 +60,29 @@ Sometimes you may want to tweak the :cache option
 Using cached reads is a lot faster, but depends on your OPC server to update the values from it's source (usually the PLC). Default behaviour is to read from the device. 
 
 
+=== Adding a common tag prefix
+
+The :prefix options allows you to add a common prefix to all tags added to the PicOpc client object
+
+	PicOpc.connect 'Matrikon.OPC.Simulation', :prefix => 'Bucket Brigade.' do |opc|
+    # prefix is added to tagname
+		opc.write('String', 'PicOpc Rules!')
+		opc['String'] = 'PicOpc Rules!'
+
+		opc.tag 'String', :bbs
+		opc.bbs = 'PicOpc Rules!'
+	end
+
+
 
 == Install
+
+If you have not yet converted to gemcutter, first perform:
+
+  [sudo] gem install gemcutter
+  [sudo] gem tumble
+
+Then:
 
 	[sudo] gem install tallakt-picopc
 
