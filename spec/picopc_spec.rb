@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/../lib/picopc"
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 MATRIKON = 'Matrikon.OPC.Simulation'
 
