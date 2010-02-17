@@ -1,0 +1,58 @@
+= PicOpc
+
+* http://github.com/tallakt/picopc
+
+== Description
+
+Pico OPC is a small library for Ruby 1.9 on Windows that can communicate with OPC (OLE for Process control) servers. OPC is frequently used for process control applications (eg. PLC programming, factory systems). Using this library it is possible to automate testing of such systems.
+
+Since the library is based on an inefficient command set (only reads/writes one value at a time, without callbacks), and is still in an early version, don't use this library for mission critical applications.
+
+For a more full featured OPC library i recommend OpenOPC written in Python (http://openopc.sourceforge.net/). This package also has some very useful command line tools that work well with PicOpc.
+
+PicOpc supports 'Classic' OPC - ie DCOM based. All commands are blocking (ie. program halts until operation has completed)
+
+To run the tests, you must install the rspec gem and the free Matrikon OPC Simulation application.
+
+== Examples
+
+this simple example covers most functionality
+
+	PicOpc.connect 'Matrikon.OPC.Simulation' do |opc|
+		# Read a variable
+		puts opc.read('Random.Int1')
+		# write a variable
+		opc.write('Bucket Brigade.String', 'PicOpc Rules!')
+
+		# Alternate syntax
+		puts opc['Random.Int1']
+		opc['Bucket Brigade.String'] = 'PicOpc Rules!'
+
+		# Defining tags with shortcuts
+		opc.tag 'Random.Int1', :ri
+		opc.tag 'Bucket Brigade.String', :bbs
+		puts opc.ri 
+		opc.bbs = 'PicOpc Rules!'
+	end
+
+Note that all exceptions thrown are of the class +PicOpcException+.
+
+
+If you don't want to use a block you can do this:
+
+	opc = PicOpc::Client.new 'Matrikon.OPC.Simulation'
+	puts opc.read('Random.Int1')
+	opc.cleanup
+
+Sometimes you may want to tweak the :cache option
+	
+	PicOpc.connect 'Matrikon.OPC.Simulation', :cache => true { |opc| ... }
+
+Using cached reads is a lot faster, but depends on your OPC server to update the values from it's source (usually the PLC). Default behaviour is to read from the device. 
+
+
+
+== Install
+
+	[sudo] gem install tallakt-picopc
+
