@@ -29,6 +29,15 @@ module PicOpc
     end
   end
 
+  # List installed OPC servers
+  #
+  # > ruby -r picopc -e 'p PicOpc::list_opc_servers'
+  # ["ArchestrA.FSGateway", "PhoenixContact.AX-Server", "PhoenixContact.AX-Server.21"]
+  #
+  def PicOpc.list_opc_servers
+    Client.list_opc_servers
+  end
+
   class Client
 
     def initialize(opc_server_name, options = {}) 
@@ -48,6 +57,16 @@ module PicOpc
         @prefix = options[:prefix].to_s || ''
       rescue Exception => e
         PicOpcException[e] # wrap all exceptions in this type
+      end
+    end
+
+    #
+    # List available OPC servers installed
+    #
+    class << self
+      def list_opc_servers
+        opc_automation = OPC_Automation_1.new
+        opc_automation.GetOPCServers
       end
     end
 
